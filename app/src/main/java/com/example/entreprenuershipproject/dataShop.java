@@ -2,13 +2,13 @@ package com.example.entreprenuershipproject;
 
 import androidx.lifecycle.ViewModel;
 
-public class shop extends ViewModel {
+public class dataShop extends ViewModel {
     public String shopName, shopStatus, shopImage;
 
-    public shop() {
+    public dataShop() {
     }
 
-    public shop(String shopName, String shopStatus, String shopImage) {
+    public dataShop(String shopName, String shopStatus, String shopImage) {
         this.shopName = shopName;
         this.shopStatus = shopStatus;
         this.shopImage = shopImage;
