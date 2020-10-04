@@ -3,13 +3,34 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".OrderListFragment">
 
-    <!-- TODO: Update blank fragment layout -->
     <TextView
+        android:id="@+id/titlePage"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:text="order list"
         android:textSize="24sp"/>
+
+<!--    <EditText-->
+<!--        android:id="@+id/inputShopName"-->
+<!--        android:layout_width="200dp"-->
+<!--        android:layout_height="40dp"-->
+<!--        android:hint="Shop Name"/>-->
+<!--    -->
+<!--    <EditText-->
+<!--        android:id="@+id/inputShopStatus"-->
+<!--        android:layout_width="200dp"-->
+<!--        android:layout_height="40dp"-->
+<!--        android:hint="Shop Status" />-->
+
+    <Button
+        android:id="@+id/submitDetail"
+        android:enabled="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="sumbit restuarant detail"
+        app:layout_constraintTop_toBottomOf="@+id/titlePage" />
 
 </FrameLayout>
