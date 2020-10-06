@@ -4,14 +4,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".ShopFragment">
+    tools:context=".fragment.ShopFragment">
 
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="shop"
-        android:textSize="24sp"/>
+<!--    <TextView-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="match_parent"-->
+<!--        android:text="shop"-->
+<!--        android:textSize="24sp"/>-->
 
     <SearchView
         android:id="@+id/searchView"
@@ -22,7 +22,7 @@
         android:layout_margin="5dp"/>
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recycleView"
+        android:id="@+id/shopRecycleView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:padding="10dp"

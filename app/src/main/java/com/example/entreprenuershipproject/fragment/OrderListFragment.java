@@ -1,4 +1,4 @@
-package com.example.entreprenuershipproject;
+package com.example.entreprenuershipproject.fragment;
 
 import android.os.Bundle;
 
@@ -10,6 +10,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.example.entreprenuershipproject.R;
+import com.example.entreprenuershipproject.dataShop;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -37,7 +39,7 @@ public class OrderListFragment extends Fragment {
         submitted.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                shop_Name = "mcd";
+                shop_Name = "tealive";
                 shop_Status = "open";
                 shop_Image = "null";
 
