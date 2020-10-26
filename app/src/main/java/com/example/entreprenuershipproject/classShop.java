@@ -2,13 +2,16 @@ package com.example.entreprenuershipproject;
 
 import androidx.lifecycle.ViewModel;
 
-public class dataShop extends ViewModel {
-    public String shopName, shopStatus, shopImage, shopAddress;
+public class classShop extends ViewModel {
+    public String shopName,
+            shopStatus,
+            shopImage,
+            shopAddress;
 
-    public dataShop() {
+    public classShop() {
     }
 
-    public dataShop(String shopName, String shopStatus, String shopImage, String shopAddress) {
+    public classShop(String shopName, String shopStatus, String shopImage, String shopAddress) {
         this.shopName = shopName;
         this.shopStatus = shopStatus;
         this.shopImage = shopImage;

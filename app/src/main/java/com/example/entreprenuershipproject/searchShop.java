@@ -1,9 +1,9 @@
 package com.example.entreprenuershipproject;
 
 public class searchShop {
-    private String shopName;
-    private String shopStatus;
-    private String shopImage;
+    private String shopName,
+            shopStatus,
+            shopImage;
 
     public searchShop() {
     }

@@ -3,9 +3,13 @@
     xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/fragmentChanger"
+    <TextView
+        android:id="@+id/qNumberDisplayHolder"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="wrap_content"
+        android:textAlignment="center"
+        android:text="sample"
+        android:textSize="25sp"
+        />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

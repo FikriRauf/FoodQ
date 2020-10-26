@@ -15,4 +15,14 @@
         android:id="@+id/accountFragment"
         android:title="Account"
         android:icon="@drawable/ic_baseline_person_24"/>
+
+    <item
+        android:id="@+id/testerFragment"
+        android:title="tester"
+        android:icon="@drawable/ic_baseline_all_inclusive_24"/>
+
+    <item
+        android:id="@+id/testerFragment2"
+        android:title="tester2"
+        android:icon="@drawable/ic_baseline_all_inclusive_24"/>
 </menu>
