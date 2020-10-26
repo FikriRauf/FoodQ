@@ -26,7 +26,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
-public class ShopFragment2 extends Fragment implements AdapterShopSearch.OnItemListener {
+public class ShopFragment2 extends Fragment {
 
     private static final String TAG = "ShopFragment";
     RecyclerView recycleView;
@@ -34,7 +34,6 @@ public class ShopFragment2 extends Fragment implements AdapterShopSearch.OnItemL
     private ArrayList<searchShop> searchingShopList;
     private AdapterShopSearch AdapterShopSearch;
     private Context mContext;
-    ShopFragment2 shopFragment2;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -51,7 +50,6 @@ public class ShopFragment2 extends Fragment implements AdapterShopSearch.OnItemL
         shopDatabaseReference = FirebaseDatabase.getInstance().getReference().child("shop");
 
         searchingShopList = new ArrayList<>();
-        shopFragment2 = new ShopFragment2();
 
         clearAll();
         getShopDataFromDatabase();
@@ -77,7 +75,7 @@ public class ShopFragment2 extends Fragment implements AdapterShopSearch.OnItemL
                     searchingShopList.add(searchShop);
                 }
 
-                AdapterShopSearch = new AdapterShopSearch(getContext(), searchingShopList, shopFragment2.getContext());
+                AdapterShopSearch = new AdapterShopSearch(getContext(), searchingShopList);
                 recycleView.setAdapter(AdapterShopSearch);
                 AdapterShopSearch.notifyDataSetChanged();
             }
@@ -102,11 +100,5 @@ public class ShopFragment2 extends Fragment implements AdapterShopSearch.OnItemL
         searchingShopList = new ArrayList<>();
     }
 
-    @Override
-    public void onItemClick(int position) {
-        Log.d(TAG, "onItemClick: ");
-        FragmentTransaction fragmentTransaction = getParentFragmentManager().beginTransaction();
-        fragmentTransaction.replace(R.id.shopFragmentChanger, new shopDetailsFragment());
-        fragmentTransaction.commit();
-    }
+
 }

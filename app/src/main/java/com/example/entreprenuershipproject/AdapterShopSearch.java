@@ -25,12 +25,10 @@ public class AdapterShopSearch extends RecyclerView.Adapter<AdapterShopSearch.Vi
     private static final  String TAG = "RecyclerView";
     private Context mContent;
     private ArrayList<searchShop> searchShopList;
-    private OnItemListener onItemListener;
 
-    public AdapterShopSearch(Context mContent, ArrayList<searchShop> searchShopList, OnItemListener onItemListener) {
+    public AdapterShopSearch(Context mContent, ArrayList<searchShop> searchShopList) {
         this.mContent = mContent;
         this.searchShopList = searchShopList;
-        this.onItemListener = onItemListener;
     }
 
     @NonNull
@@ -39,7 +37,7 @@ public class AdapterShopSearch extends RecyclerView.Adapter<AdapterShopSearch.Vi
 
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.card_holder_shop, parent, false);
 
-        return new ViewHolder(view, onItemListener);
+        return new ViewHolder(view);
     }
 
     @Override
@@ -47,14 +45,14 @@ public class AdapterShopSearch extends RecyclerView.Adapter<AdapterShopSearch.Vi
         holder.shopName.setText(searchShopList.get(position).getShopName());
         holder.shopStatus.setText((searchShopList.get(position).getShopStatus()));
         Glide.with(mContent).load(searchShopList.get(position).getShopImage()).into(holder.shopImage);
-//        holder.shopCardHolder.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-////                Fragment fr = new shopDetailsFragment();
-////                FragmentChangeListener fc=(FragmentChangeListener)mContent;
-////                fc.replaceFragment(fr);
-//            }
-//        });
+        holder.shopCardHolder.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Fragment fr = new shopDetailsFragment();
+                FragmentChangeListener fc=(FragmentChangeListener)mContent;
+                fc.replaceFragment(fr);
+            }
+        });
     }
 
     @Override
@@ -62,33 +60,21 @@ public class AdapterShopSearch extends RecyclerView.Adapter<AdapterShopSearch.Vi
         return searchShopList.size();
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public static class ViewHolder extends RecyclerView.ViewHolder {
         ImageView shopImage;
         TextView shopName, shopStatus;
         LinearLayout shopCardHolder;
-        OnItemListener onItemListener;
 
-        public ViewHolder(@NonNull View itemView, OnItemListener onItemListener) {
+        public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
             shopImage = itemView.findViewById(R.id.displayShopImage);
             shopName = itemView.findViewById(R.id.displayShopName);
             shopStatus = itemView.findViewById(R.id.displayShopStatus);
             shopCardHolder = itemView.findViewById(R.id.shopCardHolder);
-            this.onItemListener = onItemListener;
-
-            itemView.setOnClickListener(this);
 
         }
 
-        @Override
-        public void onClick(View v) {
-            onItemListener.onItemClick(getAdapterPosition());
-        }
-    }
-
-    public interface OnItemListener {
-        void onItemClick(int position);
     }
 
 //    @NonNull

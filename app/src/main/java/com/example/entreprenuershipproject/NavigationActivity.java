@@ -36,8 +36,10 @@ public class NavigationActivity extends AppCompatActivity implements FragmentCha
 
     @Override
     public void replaceFragment(Fragment fragment) {
-        Intent intent = new Intent(this, shopDetailsFragment.class);
-        startActivity(intent);
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.fragment, fragment);
+        fragmentTransaction.commit();
     }
 
 }
