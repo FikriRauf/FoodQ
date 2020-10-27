@@ -4,11 +4,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    android:background="@color/colorWhite"
     android:layout_height="match_parent">
 
 
     <ImageView
-        android:id="@+id/imageView2"
+        android:id="@+id/databaseShopImage"
         android:layout_width="380dp"
         android:layout_height="248dp"
         android:layout_marginTop="68dp"
@@ -27,7 +28,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.254"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView2" />
+        app:layout_constraintTop_toBottomOf="@+id/databaseShopImage" />
 
     <TextView
         android:id="@+id/databaseShopStatus"

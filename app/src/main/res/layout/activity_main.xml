@@ -58,8 +58,8 @@
         android:id="@+id/loginBtn"
         android:enabled="true"
         android:text="@string/btn_sign_in"
-        android:background="@color/colorAccent"
-        android:textColor="@color/colorWhite"
+        android:background="@color/projectColor"
+        android:textColor="@color/colorBlack"
         android:layout_width="264dp"
         android:layout_height="55dp"
         android:layout_marginStart="48dp"
@@ -77,28 +77,26 @@
         android:id="@+id/registerMessage02"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/register_message_02"
+        android:layout_marginTop="8dp"
 
+        android:text="@string/register_message_02"
         android:textColor="@color/colorAccent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHorizontal_bias="0.057"
+        app:layout_constraintHorizontal_bias="0.065"
         app:layout_constraintLeft_toRightOf="@id/registerMessage01"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/loginBtn"
-        app:layout_constraintVertical_bias="0.121" />
+        app:layout_constraintTop_toBottomOf="@id/loginBtn" />
 
     <TextView
         android:id="@+id/registerMessage01"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/register_message_01"
+        android:layout_marginTop="8dp"
 
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHorizontal_bias="0.402"
+        android:text="@string/register_message_01"
+        app:layout_constraintHorizontal_bias="0.406"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/loginBtn"
-        app:layout_constraintVertical_bias="0.121" />
+        app:layout_constraintTop_toBottomOf="@id/loginBtn" />
 
     <ProgressBar
         android:id="@+id/loading"

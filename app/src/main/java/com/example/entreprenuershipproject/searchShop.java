@@ -1,9 +1,11 @@
 package com.example.entreprenuershipproject;
 
 public class searchShop {
-    private String shopName,
+    private String
+            shopName,
             shopStatus,
-            shopImage;
+            shopImage,
+            shopAddress;
 
     public searchShop() {
     }
@@ -12,6 +14,14 @@ public class searchShop {
         this.shopName = shopName;
         this.shopStatus = shopStatus;
         this.shopImage = shopImage;
+    }
+
+    public String getShopAddress() {
+        return shopAddress;
+    }
+
+    public void setShopAddress(String shopAddress) {
+        this.shopAddress = shopAddress;
     }
 
     public String getShopName() {

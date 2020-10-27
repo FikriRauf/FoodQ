@@ -2,6 +2,7 @@ package com.example.entreprenuershipproject;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,10 +26,19 @@ public class AdapterShopSearch extends RecyclerView.Adapter<AdapterShopSearch.Vi
     private static final  String TAG = "RecyclerView";
     private Context mContent;
     private ArrayList<searchShop> searchShopList;
+    private String
+            arrayListShopName,
+            arrayListShopStatus,
+            arrayListShopImage,
+            arrayListShopAddress;
 
+//    private OnItemListener onItemListener;
+
+//    public AdapterShopSearch(Context mContent, ArrayList<searchShop> searchShopList, OnItemListener onItemListener) {
     public AdapterShopSearch(Context mContent, ArrayList<searchShop> searchShopList) {
         this.mContent = mContent;
         this.searchShopList = searchShopList;
+//        this.onItemListener = onItemListener;
     }
 
     @NonNull
@@ -38,17 +48,33 @@ public class AdapterShopSearch extends RecyclerView.Adapter<AdapterShopSearch.Vi
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.card_holder_shop, parent, false);
 
         return new ViewHolder(view);
+//        return new ViewHolder(view, onItemListener);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        holder.shopName.setText(searchShopList.get(position).getShopName());
-        holder.shopStatus.setText((searchShopList.get(position).getShopStatus()));
-        Glide.with(mContent).load(searchShopList.get(position).getShopImage()).into(holder.shopImage);
+        arrayListShopName = searchShopList.get(position).getShopName();
+        arrayListShopStatus = searchShopList.get(position).getShopStatus();
+        arrayListShopImage = searchShopList.get(position).getShopImage();
+        arrayListShopAddress = searchShopList.get(position).getShopAddress();
+
+        holder.shopName.setText(arrayListShopName);
+        holder.shopStatus.setText(arrayListShopStatus);
+        Glide.with(mContent).load(arrayListShopImage).into(holder.shopImage);
+
         holder.shopCardHolder.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Fragment fr = new shopDetailsFragment();
+
+                Bundle bundle = new Bundle();
+                bundle.putString("shop_Name", arrayListShopName);
+                bundle.putString("shop_Status", arrayListShopStatus);
+                bundle.putString("shop_Image", arrayListShopImage);
+                bundle.putString("shop_Address", arrayListShopAddress);
+
+                fr.setArguments(bundle);
+
                 FragmentChangeListener fc=(FragmentChangeListener)mContent;
                 fc.replaceFragment(fr);
             }
@@ -60,11 +86,14 @@ public class AdapterShopSearch extends RecyclerView.Adapter<AdapterShopSearch.Vi
         return searchShopList.size();
     }
 
+//    public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
     public static class ViewHolder extends RecyclerView.ViewHolder {
         ImageView shopImage;
         TextView shopName, shopStatus;
         LinearLayout shopCardHolder;
+        OnItemListener onItemListener;
 
+//        public ViewHolder(@NonNull View itemView, OnItemListener onItemListener) {
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
@@ -72,9 +101,20 @@ public class AdapterShopSearch extends RecyclerView.Adapter<AdapterShopSearch.Vi
             shopName = itemView.findViewById(R.id.displayShopName);
             shopStatus = itemView.findViewById(R.id.displayShopStatus);
             shopCardHolder = itemView.findViewById(R.id.shopCardHolder);
+//            this.onItemListener = onItemListener;
+
+//            itemView.setOnClickListener(this);
 
         }
 
+//        @Override
+//        public void onClick(View v) {
+//            onItemListener.onItemClick(getAdapterPosition());
+//        }
+    }
+
+    public interface OnItemListener {
+        void onItemClick(int position);
     }
 
 //    @NonNull

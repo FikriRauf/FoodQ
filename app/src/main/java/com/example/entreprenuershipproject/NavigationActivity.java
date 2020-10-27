@@ -17,7 +17,6 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
-import com.example.entreprenuershipproject.fragment.OrderListFragment2;
 import com.example.entreprenuershipproject.fragment.shopDetailsFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -36,7 +35,7 @@ public class NavigationActivity extends AppCompatActivity implements FragmentCha
 
     @Override
     public void replaceFragment(Fragment fragment) {
-        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentManager fragmentManager = getSupportFragmentManager();;
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.fragment, fragment);
         fragmentTransaction.commit();
