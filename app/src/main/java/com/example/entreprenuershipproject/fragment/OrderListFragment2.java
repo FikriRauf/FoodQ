@@ -86,12 +86,12 @@ public class OrderListFragment2 extends Fragment {
             }
         });
 
-        retrieveQueueNumberBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showDiningInDialog();
-            }
-        });
+//        retrieveQueueNumberBtn.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                showDiningInDialog();
+//            }
+//        });
 
 
         return root;

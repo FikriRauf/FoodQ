@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.entreprenuershipproject.AdapterShopSearch;
+import com.example.entreprenuershipproject.FragmentChangeListener;
 import com.example.entreprenuershipproject.R;
 import com.example.entreprenuershipproject.retrieveQueueNumberDatabase;
 import com.example.entreprenuershipproject.searchShop;
@@ -27,7 +28,8 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 
 //public class ShopFragment2 extends Fragment implements AdapterShopSearch.OnItemListener {
-public class ShopFragment2 extends Fragment {
+//public class ShopFragment2 extends Fragment {
+public class ShopFragment2 extends Fragment implements AdapterShopSearch.OnItemClickListener {
 
     private static final String TAG = "ShopFragment";
     RecyclerView recycleView;
@@ -69,7 +71,6 @@ public class ShopFragment2 extends Fragment {
                 clearAll();
                 bindDatabaseDataToObject(snapshot);
                 bindArrayListToAdapter();
-
             }
 
             @Override
@@ -84,6 +85,7 @@ public class ShopFragment2 extends Fragment {
         AdapterShopSearch = new AdapterShopSearch(getContext(), searchingShopList);
         recycleView.setAdapter(AdapterShopSearch);
         AdapterShopSearch.notifyDataSetChanged();
+        AdapterShopSearch.setOnItemClickListener(this);
     }
 
     private void bindObjectToArrayList(searchShop searchShop) {
@@ -117,11 +119,29 @@ public class ShopFragment2 extends Fragment {
         searchingShopList = new ArrayList<>();
     }
 
-//    @Override
-//    public void onItemClick(int position) {
-//        Log.d(TAG, "onItemClick: ");
-//        FragmentTransaction fragmentTransaction = getParentFragmentManager().beginTransaction();
-//        fragmentTransaction.replace(R.id.shopFragmentChanger, new shopDetailsFragment());
-//        fragmentTransaction.commit();
-//    }
+    @Override
+    public void onItemClick(int position) {
+        searchShop clickItem = searchingShopList.get(position);
+        Fragment fr = new shopDetailsFragment();
+
+        Bundle bundle1 = getClickItemData(clickItem);
+
+        fr.setArguments(bundle1);
+
+        FragmentChangeListener fc= (FragmentChangeListener) getContext();
+        if (fc != null) {
+            fc.replaceFragment(fr);
+        }
+
+    }
+
+    private Bundle getClickItemData(searchShop searchShop1) {
+        Bundle bundle = new Bundle();
+        bundle.putString("shop_Name", searchShop1.getShopName());
+        bundle.putString("shop_Status", searchShop1.getShopStatus());
+        bundle.putString("shop_Image", searchShop1.getShopImage());
+        bundle.putString("shop_Address", searchShop1.getShopAddress());
+
+        return bundle;
+    }
 }
