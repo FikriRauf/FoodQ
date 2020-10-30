@@ -5,10 +5,9 @@
         android:id="@+id/shopFragment"
         android:title="Shop"
         android:icon="@drawable/ic_baseline_store_24"/>
-
     <item
-        android:id="@+id/orderListFragment"
-        android:title="Order"
+        android:id="@+id/waitingQueueFragment"
+        android:title="Queue"
         android:icon="@drawable/ic_baseline_local_dining_24"/>
 
     <item
@@ -22,7 +21,8 @@
         android:icon="@drawable/ic_baseline_all_inclusive_24"/>
 
     <item
-        android:id="@+id/testerFragment2"
-        android:title="tester2"
+        android:id="@+id/orderListFragment"
+        android:title="tester3"
         android:icon="@drawable/ic_baseline_all_inclusive_24"/>
+
 </menu>

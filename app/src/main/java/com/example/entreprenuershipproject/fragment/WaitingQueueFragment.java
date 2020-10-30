@@ -49,16 +49,19 @@ public class WaitingQueueFragment extends Fragment {
         recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.setHasFixedSize(true);
 
-        baseDatabaseReference = FirebaseDatabase.getInstance().getReference();
-        queueDatabaseReference = baseDatabaseReference.child("queue");
-        firstQueueDatabaseReference = queueDatabaseReference.child("-MJGwPg2telALWmoMjC3");
-
         queueWaitingList = new ArrayList<>();
 
+        setDatabaseReference();
         getIdOfCurrentlyLoggedUser();
         getQueueDataFromDatabase();
 
         return root;
+    }
+
+    private void setDatabaseReference() {
+        baseDatabaseReference = FirebaseDatabase.getInstance().getReference();
+        queueDatabaseReference = baseDatabaseReference.child("queue");
+        firstQueueDatabaseReference = queueDatabaseReference.child("-MJGwPg2telALWmoMjC3");
     }
 
     private void getQueueDataFromDatabase() {

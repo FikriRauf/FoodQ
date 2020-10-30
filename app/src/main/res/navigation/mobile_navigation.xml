@@ -9,27 +9,27 @@
         android:id="@+id/shopFragment"
         android:name="com.example.entreprenuershipproject.fragment.ShopFragment"
         android:label="fragment_shop"
-        tools:layout="@layout/fragment_shop" />
+        tools:layout="@layout/fragment_shop"/>
     <fragment
-        android:id="@+id/orderListFragment"
-        android:name="com.example.entreprenuershipproject.fragment.OrderListFragment"
-        android:label="fragment_order_list"
-        tools:layout="@layout/fragment_order_list_2" />
+        android:id="@+id/waitingQueueFragment"
+        android:name="com.example.entreprenuershipproject.fragment.WaitingQueueFragment"
+        tools:layout="@layout/fragment_waiting_queue"/>
     <fragment
         android:id="@+id/accountFragment"
         android:name="com.example.entreprenuershipproject.fragment.AccountFragment"
         android:label="fragment_account"
-        tools:layout="@layout/fragment_account" />
+        tools:layout="@layout/fragment_account"/>
 
     <fragment
         android:id="@+id/testerFragment"
         android:name="com.example.entreprenuershipproject.fragment.TesterFragment"
         android:label="fragment_tester"
-        tools:layout="@layout/fragment_tester"
-        />
-
+        tools:layout="@layout/fragment_tester"/>
     <fragment
-        android:id="@+id/testerFragment2"
-        android:name="com.example.entreprenuershipproject.fragment.WaitingQueueFragment"
-        tools:layout="@layout/fragment_waiting_queue"/>
+        android:id="@+id/orderListFragment"
+        android:name="com.example.entreprenuershipproject.fragment.OrderListFragment"
+        android:label="fragment_order_list"
+        tools:layout="@layout/fragment_order_list_2"/>
+
+
 </navigation>

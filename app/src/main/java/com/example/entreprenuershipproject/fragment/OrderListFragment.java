@@ -21,7 +21,7 @@ public class OrderListFragment extends Fragment {
         View root = inflater.inflate(R.layout.fragment_order_list, container, false);
 
         FragmentTransaction fragmentTransaction = getChildFragmentManager().beginTransaction();
-        fragmentTransaction.replace(R.id.fragmentChanger, new OrderListFragment2());
+        fragmentTransaction.replace(R.id.fragmentChanger, new TesterFragment2());
         fragmentTransaction.commit();
 
         return root;

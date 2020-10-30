@@ -20,7 +20,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-public class OrderListFragment2 extends Fragment {
+public class TesterFragment2 extends Fragment {
 
     Dialog diningInDialog;
     private static final String TAG = "NewPostActivity";
@@ -51,7 +51,7 @@ public class OrderListFragment2 extends Fragment {
     ImageView closeDiningInDialog;
 
 
-    public OrderListFragment2() {
+    public TesterFragment2() {
         // Required empty public constructor
     }
 
@@ -70,9 +70,7 @@ public class OrderListFragment2 extends Fragment {
         queueValue = new classGenerateQueueNumber();
         diningInDialog = new Dialog(requireContext());
 
-        baseDatabaseReference = FirebaseDatabase.getInstance().getReference();
-        shopDetailDbReference = baseDatabaseReference.child("shop");
-        queueNumberDbReference = baseDatabaseReference.child("queue");
+        setDatabaseReference();
 
         submitShopDetailBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -86,15 +84,21 @@ public class OrderListFragment2 extends Fragment {
             }
         });
 
-//        retrieveQueueNumberBtn.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                showDiningInDialog();
-//            }
-//        });
+        retrieveQueueNumberBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showDiningInDialog();
+            }
+        });
 
 
         return root;
+    }
+
+    private void setDatabaseReference() {
+        baseDatabaseReference = FirebaseDatabase.getInstance().getReference();
+        shopDetailDbReference = baseDatabaseReference.child("shop");
+        queueNumberDbReference = baseDatabaseReference.child("queue");
     }
 
     private void sendQueueDetailToDatabase() {

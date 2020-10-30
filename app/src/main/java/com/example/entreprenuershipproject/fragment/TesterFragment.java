@@ -20,6 +20,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
+
 public class TesterFragment extends Fragment {
 
     DatabaseReference
@@ -31,13 +33,21 @@ public class TesterFragment extends Fragment {
     TextView
             shopName,
             shopStatus,
-            shopAddress;
+            shopAddress,
+            randomQueueNumber;
 
     String
             queueNumber,
             queueStatus,
+            queueId,
             currentUserIdDetail,
-            shopNameFromDatabase;
+            shopNameFromDatabase,
+            firstArrayElement,
+            assignedQueueNumberId;
+
+    ArrayList<String> availableQueueNumbers;
+    int counter;
+
 
     @Nullable
     @Override
@@ -46,28 +56,30 @@ public class TesterFragment extends Fragment {
 
         View root = inflater.inflate(R.layout.fragment_tester, container, false);
 
-        shopAddress = root.findViewById(R.id.shopAddressTester);
-        shopName = root.findViewById(R.id.shopTitleTester);
-        shopStatus = root.findViewById(R.id.shopStatusTester);
+        availableQueueNumbers = new ArrayList<>();
+        counter = 0;
 
-        baseDatabaseReference = FirebaseDatabase.getInstance().getReference();
-        kfcDatabaseReference = baseDatabaseReference.child("shop").child("-MIi9tVB7OBmVYtj2VMn");
-        queueNumberDatabaseReference = baseDatabaseReference.child("queue");
-
-//        getShopDetailFromDatabase();
-        getQueueNumberFromDatabase();
+        setLayoutViewsToLocalVariables(root);
+        setDatabaseReferences();
         getShopNameFromDatabase();
         getIdOfCurrentlyLoggedUser();
+        getQueueNumberFromDatabase();
+
 
         return root;
     }
 
-    private void getIdOfCurrentlyLoggedUser() {
-        FirebaseUser currentFirebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-        if (currentFirebaseUser != null) {
-            currentUserIdDetail = currentFirebaseUser.getUid();
-            Log.d("user Detail", "current logged user id:  " + currentUserIdDetail);
-        }
+    private void setLayoutViewsToLocalVariables(View root) {
+        shopAddress = root.findViewById(R.id.shopAddressTester);
+        shopName = root.findViewById(R.id.shopTitleTester);
+        shopStatus = root.findViewById(R.id.shopStatusTester);
+        randomQueueNumber = root.findViewById(R.id.randomAssignQueueNumber);
+    }
+
+    private void setDatabaseReferences() {
+        baseDatabaseReference = FirebaseDatabase.getInstance().getReference();
+        kfcDatabaseReference = baseDatabaseReference.child("shop").child("-MIi9tVB7OBmVYtj2VMn");
+        queueNumberDatabaseReference = baseDatabaseReference.child("queue");
     }
 
     private void getShopNameFromDatabase() {
@@ -85,42 +97,26 @@ public class TesterFragment extends Fragment {
         });
     }
 
+    private void getIdOfCurrentlyLoggedUser() {
+        FirebaseUser currentFirebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        if (currentFirebaseUser != null) {
+            currentUserIdDetail = currentFirebaseUser.getUid();
+//            Log.d("user Detail", "current logged user id:  " + currentUserIdDetail);
+        }
+    }
+
     private void getQueueNumberFromDatabase() {
         queueNumberDatabaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
 
-                String queueID = "-MJGwPg2telALWmoMjC3";
-                shopName.setText(snapshot.child(queueID).child("queueNumber").getValue(String.class));
-                shopAddress.setText(snapshot.child(queueID).child("queueStatus").getValue(String.class));
+//                getKfcData(snapshot);
 
                 for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
-                    String qId = dataSnapshot.getKey();
-                    Log.d("Q Id", "queueId: " + qId);
-
-                    queueNumber = (String) dataSnapshot.child("queueNumber").getValue();
-                    queueStatus = (String) dataSnapshot.child("queueStatus").getValue();
-                    Log.d("Q Detail: ", " "+ "\nqueueNumber: " + queueNumber + "\nqueueStatus: " + queueStatus + "\n ");
-
-                    if (queueStatus != null) {
-                        if (queueStatus.equals("unavailable")) {
-                            Log.d("qStatus", "qStatus: " + queueNumber);
-
-                            String queueNumberId = dataSnapshot.getKey();
-                            Log.d("qStatus", "queue number with status unavailable' ID: " + queueNumberId);
-
-                            if (queueNumberId != null) {
-                                queueNumberChildDatabaseReference = queueNumberDatabaseReference.child(queueNumberId);
-                            }
-
-                            queueNumberChildDatabaseReference.child("queueStatus").setValue("available");
-                            queueNumberChildDatabaseReference.child("userId").setValue(currentUserIdDetail);
-                            queueNumberChildDatabaseReference.child("shopName").setValue(shopNameFromDatabase);
-
-                        }
-                    }
+                    getAllQueueNumbers(dataSnapshot);
+                    setAvailableQueueNumbersToArray();
                 }
-
+                queueNumberAssignment();
             }
 
             @Override
@@ -130,15 +126,52 @@ public class TesterFragment extends Fragment {
         });
     }
 
-    private void getShopDetailFromDatabase() {
-        kfcDatabaseReference.addValueEventListener(new ValueEventListener() {
+    private void getKfcData(DataSnapshot snapshot) {
+        String queueID = "-MJGwPg2telALWmoMjC3";
+        shopName.setText(snapshot.child(queueID).child("queueNumber").getValue(String.class));
+        shopAddress.setText(snapshot.child(queueID).child("queueStatus").getValue(String.class));
+    }
+
+    private void getAllQueueNumbers(DataSnapshot dataSnapshot) {
+        queueId = dataSnapshot.getKey();
+        queueNumber = (String) dataSnapshot.child("queueNumber").getValue();
+        queueStatus = (String) dataSnapshot.child("queueStatus").getValue();
+
+        Log.d("Q Detail: ", " "
+                + "\nqueueId: " + queueId
+                + "\nqueueNumber: " + queueNumber
+                + "\nqueueStatus: " + queueStatus
+                + "\n ");
+    }
+
+    private void setAvailableQueueNumbersToArray() {
+        if (queueStatus.equals("available")) {
+            availableQueueNumbers.add(counter, queueNumber);
+            counter++;
+        }
+        Log.d("Queue Array", " "
+                + "\nqArray: " + availableQueueNumbers
+                + "\nCounter: " + counter);
+    }
+
+    private void queueNumberAssignment() {
+        getFirstArrayElementAsAssignedQueueNumber();
+        getFirstArrayElementFromDatabase();
+    }
+
+    private void getFirstArrayElementAsAssignedQueueNumber() {
+        int firstElement = 0;
+        firstArrayElement = availableQueueNumbers.get(firstElement);
+        randomQueueNumber.setText(firstArrayElement);
+    }
+
+    private void getFirstArrayElementFromDatabase() {
+        queueNumberDatabaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                String shopID = snapshot.getKey();
-                Log.d("title", "shopID: " + shopID);
-                shopName.setText(snapshot.child("shopName").getValue(String.class));
-                shopAddress.setText(snapshot.child("shopAddress").getValue(String.class));
-                shopStatus.setText(snapshot.child("shopStatus").getValue(String.class));
+                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                    searchAssignedQueueNumberInDatabase(dataSnapshot);
+                }
             }
 
             @Override
@@ -148,5 +181,34 @@ public class TesterFragment extends Fragment {
         });
     }
 
+    private void searchAssignedQueueNumberInDatabase(DataSnapshot dataSnapshot) {
+        String queueNumberFromDatabase = (String) dataSnapshot.child("queueNumber").getValue();
+
+        if (queueNumberFromDatabase != null) {
+            if (queueNumberFromDatabase.equals(firstArrayElement)) {
+                getAssignedQueueNumberId(dataSnapshot);
+                setUserAndShopDetailsToAssignedQueuNumber();
+            }
+        }
+    }
+
+    private void getAssignedQueueNumberId(DataSnapshot dataSnapshot) {
+        assignedQueueNumberId = dataSnapshot.getKey();
+        Log.d("assigned qNumber", " "
+                + "\nID of queue number from  first array element " + assignedQueueNumberId);
+    }
+
+    private void setUserAndShopDetailsToAssignedQueuNumber() {
+        if (assignedQueueNumberId != null) {
+            queueNumberChildDatabaseReference = queueNumberDatabaseReference.child(assignedQueueNumberId);
+        } else {
+            Log.d("HELLLLOOO", "U FCK UP");
+        }
+
+        queueNumberChildDatabaseReference.child("queueStatus").setValue("unavailable");
+        queueNumberChildDatabaseReference.child("queueState").setValue("Waiting");
+        queueNumberChildDatabaseReference.child("userId").setValue(currentUserIdDetail);
+        queueNumberChildDatabaseReference.child("shopName").setValue(shopNameFromDatabase);
+    }
 
 }

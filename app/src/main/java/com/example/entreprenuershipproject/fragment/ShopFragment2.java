@@ -9,14 +9,12 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.entreprenuershipproject.AdapterShopSearch;
 import com.example.entreprenuershipproject.FragmentChangeListener;
 import com.example.entreprenuershipproject.R;
-import com.example.entreprenuershipproject.retrieveQueueNumberDatabase;
 import com.example.entreprenuershipproject.searchShop;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
