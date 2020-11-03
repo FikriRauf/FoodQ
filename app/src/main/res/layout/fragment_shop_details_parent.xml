@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorWhite"
-    tools:context=".fragment.shopDetailsFragment2">
+    tools:context=".fragment.shopDetailsFragmentChild">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/shopDetailFragmentChanger"

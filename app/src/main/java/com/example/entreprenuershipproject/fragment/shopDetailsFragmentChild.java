@@ -16,14 +16,13 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.bumptech.glide.Glide;
 import com.example.entreprenuershipproject.R;
-import com.example.entreprenuershipproject.retrieveQueueNumberDatabase;
 
-public class shopDetailsFragment2 extends Fragment {
+public class shopDetailsFragmentChild extends Fragment {
 
     TextView
-            shopName,
-            shopStatus,
-            shopAddress;
+            shopDetailName,
+            shopDetailStatus,
+            shopDetailAddress;
 
     String
             bundleShopName,
@@ -32,7 +31,7 @@ public class shopDetailsFragment2 extends Fragment {
             bundleShopImage;
 
     ImageView
-            shopImage,
+            shopDetailImage,
             closeDiningInDialog;
     Button
             diningBtn,
@@ -47,16 +46,12 @@ public class shopDetailsFragment2 extends Fragment {
         super.onCreate(savedInstanceState);
         View root = inflater.inflate(R.layout.fragment_shop_details_2, container, false);
 
-        shopName = root.findViewById(R.id.databaseShopName);
-        shopStatus = root.findViewById(R.id.databaseShopStatus);
-        shopAddress = root.findViewById(R.id.databaseShopAddress);
-        shopImage = root.findViewById(R.id.databaseShopImage);
-        diningBtn = root.findViewById(R.id.diningInBtn);
 
         diningInDialog = new Dialog(requireContext());
 
+        setLayoutViewsToLocalVariables(root);
         getBundleData();
-        setBundleDataToViews();
+        setBundleDataToLayoutViews();
         diningBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -66,6 +61,14 @@ public class shopDetailsFragment2 extends Fragment {
 
 
         return root;
+    }
+
+    private void setLayoutViewsToLocalVariables(View root) {
+        shopDetailName = root.findViewById(R.id.databaseShopName);
+        shopDetailStatus = root.findViewById(R.id.databaseShopStatus);
+        shopDetailAddress = root.findViewById(R.id.databaseShopAddress);
+        shopDetailImage = root.findViewById(R.id.databaseShopImage);
+        diningBtn = root.findViewById(R.id.diningInBtn);
     }
 
     private void getBundleData() {
@@ -78,18 +81,18 @@ public class shopDetailsFragment2 extends Fragment {
         }
     }
 
-    private void setBundleDataToViews() {
-        shopName.setText(bundleShopName);
-        shopStatus.setText(bundleShopStatus);
-        shopAddress.setText(bundleShopAddress);
-        Glide.with(getContext()).load(bundleShopImage).into(shopImage);
+    private void setBundleDataToLayoutViews() {
+        shopDetailName.setText(bundleShopName);
+        shopDetailStatus.setText(bundleShopStatus);
+        shopDetailAddress.setText(bundleShopAddress);
+        Glide.with(this).load(bundleShopImage).into(shopDetailImage);
     }
 
     private void showDiningInDialog() {
         diningInDialog.setContentView(R.layout.dining_in_dialog);
-        closeDiningInDialog = (ImageView) diningInDialog.findViewById(R.id.closeDineInDialog);
-        notDiningInTodayBtn = (Button) diningInDialog.findViewById(R.id.notDiningInTodayBtn);
-        diningInTodayBtn = (Button) diningInDialog.findViewById(R.id.diningInTodayBtn);
+        closeDiningInDialog = diningInDialog.findViewById(R.id.closeDineInDialog);
+        notDiningInTodayBtn = diningInDialog.findViewById(R.id.notDiningInTodayBtn);
+        diningInTodayBtn = diningInDialog.findViewById(R.id.diningInTodayBtn);
 
 
         closeDiningInDialog.setOnClickListener(new View.OnClickListener() {
@@ -109,13 +112,14 @@ public class shopDetailsFragment2 extends Fragment {
         diningInTodayBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                FragmentTransaction fragmentTransaction = getParentFragmentManager().beginTransaction();
-                Fragment fragment = new retrieveQueueNumberDatabase();
                 Bundle sendBundle = new Bundle();
                 sendBundle.putString("shop_Name", bundleShopName);
-                fragment.setArguments(sendBundle);
 
-                fragmentTransaction.replace(R.id.shopDetailFragmentChanger, fragment);
+                Fragment retrieveQueueNumberFragment = new retrieveQueueNumberDatabase();
+                retrieveQueueNumberFragment.setArguments(sendBundle);
+
+                FragmentTransaction fragmentTransaction = getParentFragmentManager().beginTransaction();
+                fragmentTransaction.replace(R.id.shopDetailFragmentChanger, retrieveQueueNumberFragment);
                 fragmentTransaction.commit();
                 diningInDialog.dismiss();
             }

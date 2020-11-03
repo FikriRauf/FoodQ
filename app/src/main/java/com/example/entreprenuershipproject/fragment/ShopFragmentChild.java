@@ -1,6 +1,5 @@
 package com.example.entreprenuershipproject.fragment;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -20,22 +19,18 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
-//public class ShopFragment2 extends Fragment implements AdapterShopSearch.OnItemListener {
-//public class ShopFragment2 extends Fragment {
-public class ShopFragment2 extends Fragment implements AdapterShopSearch.OnItemClickListener {
 
-    private static final String TAG = "ShopFragment";
+public class ShopFragmentChild extends Fragment implements AdapterShopSearch.OnItemClickListener {
+
+    private static final String TAG = "ShopFragmentParent";
     RecyclerView recycleView;
     DatabaseReference shopDatabaseReference;
     private ArrayList<searchShop> searchingShopList;
     private AdapterShopSearch AdapterShopSearch;
-    private Context mContext;
-//    searchShop searchShop;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -61,9 +56,7 @@ public class ShopFragment2 extends Fragment implements AdapterShopSearch.OnItemC
     }
 
     private void getShopDataFromDatabase() {
-        Query query = shopDatabaseReference;
-
-        query.addValueEventListener(new ValueEventListener() {
+        shopDatabaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 clearAll();
@@ -79,32 +72,6 @@ public class ShopFragment2 extends Fragment implements AdapterShopSearch.OnItemC
 
     }
 
-    private void bindArrayListToAdapter() {
-        AdapterShopSearch = new AdapterShopSearch(getContext(), searchingShopList);
-        recycleView.setAdapter(AdapterShopSearch);
-        AdapterShopSearch.notifyDataSetChanged();
-        AdapterShopSearch.setOnItemClickListener(this);
-    }
-
-    private void bindObjectToArrayList(searchShop searchShop) {
-        searchingShopList.add(searchShop);
-
-    }
-
-    private void bindDatabaseDataToObject(DataSnapshot snapshot) {
-        for (DataSnapshot snapshot1 : snapshot.getChildren()) {
-            Log.d("team", "child is " + snapshot.getChildren());
-            searchShop searchShop = new searchShop();
-
-            searchShop.setShopImage(snapshot1.child("shopImage").getValue().toString());
-            searchShop.setShopName(snapshot1.child("shopName").getValue().toString());
-            searchShop.setShopStatus(snapshot1.child("shopStatus").getValue().toString());
-            searchShop.setShopAddress(snapshot1.child("shopAddress").getValue().toString());
-
-            bindObjectToArrayList(searchShop);
-        }
-    }
-
     private void clearAll() {
         if (searchingShopList != null) {
             searchingShopList.clear();
@@ -117,20 +84,43 @@ public class ShopFragment2 extends Fragment implements AdapterShopSearch.OnItemC
         searchingShopList = new ArrayList<>();
     }
 
+    private void bindDatabaseDataToObject(DataSnapshot snapshot) {
+        for (DataSnapshot snapshot1 : snapshot.getChildren()) {
+            searchShop searchShop = new searchShop();
+
+            searchShop.setShopImage(snapshot1.child("shopImage").getValue().toString());
+            searchShop.setShopName(snapshot1.child("shopName").getValue().toString());
+            searchShop.setShopStatus(snapshot1.child("shopStatus").getValue().toString());
+            searchShop.setShopAddress(snapshot1.child("shopAddress").getValue().toString());
+
+            bindObjectToArrayList(searchShop);
+        }
+    }
+
+    private void bindObjectToArrayList(searchShop searchShop) {
+        searchingShopList.add(searchShop);
+
+    }
+
+    private void bindArrayListToAdapter() {
+        AdapterShopSearch = new AdapterShopSearch(getContext(), searchingShopList);
+        recycleView.setAdapter(AdapterShopSearch);
+        AdapterShopSearch.notifyDataSetChanged();
+        AdapterShopSearch.setOnItemClickListener(this);
+    }
+
     @Override
     public void onItemClick(int position) {
         searchShop clickItem = searchingShopList.get(position);
-        Fragment fr = new shopDetailsFragment();
 
         Bundle bundle1 = getClickItemData(clickItem);
 
-        fr.setArguments(bundle1);
-
+        Fragment shopDetailFragmentParent = new shopDetailsFragmentParent();
+        shopDetailFragmentParent.setArguments(bundle1);
         FragmentChangeListener fc= (FragmentChangeListener) getContext();
         if (fc != null) {
-            fc.replaceFragment(fr);
+            fc.replaceFragment(shopDetailFragmentParent);
         }
-
     }
 
     private Bundle getClickItemData(searchShop searchShop1) {

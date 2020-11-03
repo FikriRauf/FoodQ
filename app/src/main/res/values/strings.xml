@@ -21,7 +21,7 @@
     <string name="btn_sign_in">Log in</string>
 
     <string name="login_mamba_title">Mamba</string>
-    <string name="login_greeting_message">Welcome Back</string>
+    <string name="login_greeting_message">Welcome</string>
 
     <string name="forgot_message">Enter your email you register with, so that we can send a reset link</string>
     <string name="forgot_password">Forgot Password?</string>

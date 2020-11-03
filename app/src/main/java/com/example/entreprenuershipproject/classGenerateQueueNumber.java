@@ -5,8 +5,9 @@ import android.util.Log;
 import androidx.lifecycle.ViewModel;
 
 public class classGenerateQueueNumber extends ViewModel {
-    public String queueNumber;
-    public String queueStatus;
+    public String
+            queueNumber,
+            queueStatus;
 
     public classGenerateQueueNumber() {
     }

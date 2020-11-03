@@ -1,4 +1,4 @@
-package com.example.entreprenuershipproject.fragment;
+package com.example.entreprenuershipproject.fragment.tester;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -10,7 +10,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-
 import com.example.entreprenuershipproject.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -22,7 +21,8 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
-public class TesterFragment extends Fragment {
+public class TesterQueueAssignment extends Fragment {
+
 
     DatabaseReference
             baseDatabaseReference,
@@ -48,26 +48,24 @@ public class TesterFragment extends Fragment {
     ArrayList<String> availableQueueNumbers;
     int counter;
 
-
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        View root = inflater.inflate(R.layout.fragment_tester, container, false);
-
+        View root = inflater.inflate(R.layout.fragment_tester_queue_assignment, container, false);
         availableQueueNumbers = new ArrayList<>();
         counter = 0;
 
         setLayoutViewsToLocalVariables(root);
         setDatabaseReferences();
         getShopNameFromDatabase();
-        getIdOfCurrentlyLoggedUser();
+        getCurrentlyLoggedUserId();
         getQueueNumberFromDatabase();
-
 
         return root;
     }
+
 
     private void setLayoutViewsToLocalVariables(View root) {
         shopAddress = root.findViewById(R.id.shopAddressTester);
@@ -97,7 +95,7 @@ public class TesterFragment extends Fragment {
         });
     }
 
-    private void getIdOfCurrentlyLoggedUser() {
+    private void getCurrentlyLoggedUserId() {
         FirebaseUser currentFirebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         if (currentFirebaseUser != null) {
             currentUserIdDetail = currentFirebaseUser.getUid();
@@ -210,5 +208,4 @@ public class TesterFragment extends Fragment {
         queueNumberChildDatabaseReference.child("userId").setValue(currentUserIdDetail);
         queueNumberChildDatabaseReference.child("shopName").setValue(shopNameFromDatabase);
     }
-
 }

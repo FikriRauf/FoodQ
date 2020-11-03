@@ -1,16 +1,20 @@
-package com.example.entreprenuershipproject;
+package com.example.entreprenuershipproject.fragment;
 
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
+import com.example.entreprenuershipproject.FragmentChangeListener;
+import com.example.entreprenuershipproject.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -42,8 +46,10 @@ public class retrieveQueueNumberDatabase extends Fragment {
             currentUserIdDetail,
             firstArrayElement,
             assignedQueueNumberId,
-            bundleShopName;
+            bundleShopName,
+            assignedQueueNumber;
 
+    Button proceedBtn;
     ArrayList<String> availableQueueNumbers;
     int counter;
 
@@ -59,11 +65,13 @@ public class retrieveQueueNumberDatabase extends Fragment {
         getBundleData();
         setLayoutViewsToLocalVariables(root);
         setDatabaseReferences();
-        getIdOfCurrentlyLoggedUser();
+        getCurrentlyLoggedUserId();
         getQueueNumberFromDatabase();
+        proceedToShopMenu();
 
         return root;
     }
+
 
     private void getBundleData() {
         Bundle bundle = getArguments();
@@ -71,8 +79,10 @@ public class retrieveQueueNumberDatabase extends Fragment {
             bundleShopName = bundle.getString("shop_Name");
         }
     }
+
     private void setLayoutViewsToLocalVariables(View root) {
         queueNumberDisplay = root.findViewById(R.id.displayQueueNumberPage);
+        proceedBtn = root.findViewById(R.id.proceedBtn);
     }
 
     private void setDatabaseReferences() {
@@ -80,8 +90,7 @@ public class retrieveQueueNumberDatabase extends Fragment {
         queueNumberDatabaseReference = baseDatabaseReference.child("queue");
     }
 
-
-    private void getIdOfCurrentlyLoggedUser() {
+    private void getCurrentlyLoggedUserId() {
         FirebaseUser currentFirebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         if (currentFirebaseUser != null) {
             currentUserIdDetail = currentFirebaseUser.getUid();
@@ -97,7 +106,7 @@ public class retrieveQueueNumberDatabase extends Fragment {
                     getAllQueueNumbers(dataSnapshot);
                     setAvailableQueueNumbersToArray();
                 }
-                queueNumberAssignment();
+                queueNumberAssignment(snapshot);
             }
 
             @Override
@@ -129,9 +138,9 @@ public class retrieveQueueNumberDatabase extends Fragment {
                 + "\nCounter: " + counter);
     }
 
-    private void queueNumberAssignment() {
+    private void queueNumberAssignment(DataSnapshot snapshot) {
         getFirstArrayElementAsAssignedQueueNumber();
-        getFirstArrayElementFromDatabase();
+        getFirstArrayElementFromDatabase(snapshot);
     }
 
     private void getFirstArrayElementAsAssignedQueueNumber() {
@@ -140,20 +149,10 @@ public class retrieveQueueNumberDatabase extends Fragment {
         queueNumberDisplay.setText(firstArrayElement);
     }
 
-    private void getFirstArrayElementFromDatabase() {
-        queueNumberDatabaseReference.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
-                    searchAssignedQueueNumberInDatabase(dataSnapshot);
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
+    private void getFirstArrayElementFromDatabase(DataSnapshot snapshot) {
+        for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+            searchAssignedQueueNumberInDatabase(dataSnapshot);
+        }
     }
 
     private void searchAssignedQueueNumberInDatabase(DataSnapshot dataSnapshot) {
@@ -161,6 +160,8 @@ public class retrieveQueueNumberDatabase extends Fragment {
 
         if (queueNumberFromDatabase != null) {
             if (queueNumberFromDatabase.equals(firstArrayElement)) {
+                assignedQueueNumber = queueNumberFromDatabase;
+                Log.d("QNumber holder", "assignedQueueNumber: " + assignedQueueNumber);
                 getAssignedQueueNumberId(dataSnapshot);
                 setUserAndShopDetailsToAssignedQueuNumber();
             }
@@ -186,4 +187,26 @@ public class retrieveQueueNumberDatabase extends Fragment {
         queueNumberChildDatabaseReference.child("shopName").setValue(bundleShopName);
     }
 
+    private void proceedToShopMenu() {
+        proceedBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Bundle sendBundle = new Bundle();
+                setBundleDataToFragment(sendBundle);
+
+                Fragment shopMenuFragment = new shopMenuFragment();
+                shopMenuFragment.setArguments(sendBundle);
+
+                FragmentTransaction fragmentTransaction = getParentFragmentManager().beginTransaction();
+                fragmentTransaction.replace(R.id.shopDetailFragmentChanger, shopMenuFragment);
+                fragmentTransaction.commit();
+
+            }
+        });
+    }
+
+    private void setBundleDataToFragment(Bundle sendBundle) {
+        sendBundle.putString("shop_Name", bundleShopName);
+        sendBundle.putString("queue_Number", assignedQueueNumber);
+    }
 }

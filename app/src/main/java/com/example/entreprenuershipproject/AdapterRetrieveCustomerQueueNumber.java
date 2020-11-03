@@ -10,12 +10,24 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+
 import java.util.ArrayList;
 
 public class AdapterRetrieveCustomerQueueNumber extends RecyclerView.Adapter<AdapterRetrieveCustomerQueueNumber.ViewHolder> {
 
     private Context mContent;
     private ArrayList<classRetrieveQueueNumber> queue;
+
+    private OnItemClickListener mListener;
+
+    public interface OnItemClickListener {
+        void onItemClick(int position);
+    }
+    public void setOnItemClickListener (OnItemClickListener listener) {
+        this.mListener = listener;
+    }
+
 
     public AdapterRetrieveCustomerQueueNumber(Context mContent, ArrayList<classRetrieveQueueNumber> queueNumber) {
         this.mContent = mContent;
@@ -34,10 +46,17 @@ public class AdapterRetrieveCustomerQueueNumber extends RecyclerView.Adapter<Ada
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        holder.displayQueueNumber.setText(queue.get(position).getQueueNumber());
-        holder.displayQueueShopName.setText(queue.get(position).getQueuedShopName());
-        holder.displayQueueState.setText(queue.get(position).getQueueState());
+        classRetrieveQueueNumber getPosition = queue.get(position);
 
+        String arrayListQueueNumber = getPosition.getQueueNumber();
+        String arrayListQueueShopName = getPosition.getQueuedShopName();
+        String arrayListQueueState = getPosition.getQueueState();
+        String arrayListQueueShopImage = getPosition.getQueueShopImage();
+
+        holder.displayQueueNumber.setText(arrayListQueueNumber);
+        holder.displayQueueShopName.setText(arrayListQueueShopName);
+        holder.displayQueueState.setText(arrayListQueueState);
+        Glide.with(mContent).load(arrayListQueueShopImage).into(holder.displayQueueShopImage);
     }
 
     @Override
@@ -45,8 +64,9 @@ public class AdapterRetrieveCustomerQueueNumber extends RecyclerView.Adapter<Ada
         return queue.size();
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
+    public class ViewHolder extends RecyclerView.ViewHolder {
         TextView displayQueueShopName, displayQueueNumber, displayQueueState;
+        ImageView displayQueueShopImage;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -54,7 +74,19 @@ public class AdapterRetrieveCustomerQueueNumber extends RecyclerView.Adapter<Ada
             displayQueueShopName = itemView.findViewById(R.id.displayQueueShopName);
             displayQueueNumber = itemView.findViewById(R.id.displayQueueNumber);
             displayQueueState = itemView.findViewById(R.id.displayQueueState);
+            displayQueueShopImage = itemView.findViewById(R.id.displayQueueShopImage);
 
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (mListener != null) {
+                        int position = getAdapterPosition();
+                        if (position != RecyclerView.NO_POSITION) {
+                            mListener.onItemClick(position);
+                        }
+                    }
+                }
+            });
         }
     }
 }

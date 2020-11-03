@@ -6,29 +6,18 @@
     android:background="@color/colorWhite"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragment.OrderListFragment">
+    tools:context=".fragment.tester.TesterFragmentParent2">
 
     <TextView
         android:id="@+id/titlePage"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:text="order list"
-        android:textSize="24sp" />
-
-    <Button
-        android:id="@+id/submitShopDetail"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentBottom="true"
-        android:enabled="true"
-        android:text="sumbit restuarant detail"
+        android:textSize="24sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.483" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/submitQueueNumberDetail"
@@ -37,14 +26,28 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="325dp"
+        android:layout_marginBottom="24dp"
         android:enabled="true"
         android:text="sumbit queue detail"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/submitShopDetail"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.541" />
+        app:layout_constraintHorizontal_bias="0.50"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/submitShopDetail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="24dp"
+        android:enabled="true"
+        android:text="sumbit restuarant detail"
+        app:layout_constraintBottom_toTopOf="@+id/retrieveQueueNumber"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
 
     <Button
         android:id="@+id/retrieveQueueNumber"
@@ -53,12 +56,20 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
-        android:layout_marginTop="219dp"
+        android:layout_marginBottom="280dp"
         android:text="get queue number"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.517" />
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/submitShopMenu"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="24dp"
+        android:text="sumbit menu item"
+        app:layout_constraintBottom_toTopOf="@+id/submitQueueNumberDetail"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

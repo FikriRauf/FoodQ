@@ -11,36 +11,35 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.example.entreprenuershipproject.R;
-import com.example.entreprenuershipproject.searchShop;
 
-public class shopDetailsFragment extends Fragment {
+public class shopDetailsFragmentParent extends Fragment {
     String
             bundleShopName,
             bundleShopStatus,
             bundleShopAddress,
             bundleShopImage;
-    Bundle bundleAssign;
+//    Bundle sendBundle;
 
 
-    public shopDetailsFragment() {
+    public shopDetailsFragmentParent() {
 
     }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View root = inflater.inflate(R.layout.fragment_shop_details, container, false);
+        View root = inflater.inflate(R.layout.fragment_shop_details_parent, container, false);
 
-        bundleAssign = new Bundle();
+        Bundle sendBundle = new Bundle();
 
         getReceivedBundleData();
-        setReceivedBundleDataToSendBundleData();
+        setReceivedBundleDataToSendBundle(sendBundle);
 
-        Fragment shopDetailsFragment2 = new shopDetailsFragment2();
-        shopDetailsFragment2.setArguments(bundleAssign);
+        Fragment shopDetailsFragmentChild = new shopDetailsFragmentChild();
+        shopDetailsFragmentChild.setArguments(sendBundle);
 
         FragmentTransaction fragmentTransaction = getChildFragmentManager().beginTransaction();
-        fragmentTransaction.replace(R.id.shopDetailFragmentChanger, shopDetailsFragment2);
+        fragmentTransaction.replace(R.id.shopDetailFragmentChanger, shopDetailsFragmentChild);
         fragmentTransaction.commit();
 
         return root;
@@ -56,11 +55,10 @@ public class shopDetailsFragment extends Fragment {
         }
     }
 
-    private void setReceivedBundleDataToSendBundleData() {
-        bundleAssign.putString("shop_Name", bundleShopName);
-        bundleAssign.putString("shop_Status", bundleShopStatus);
-        bundleAssign.putString("shop_Address", bundleShopAddress);
-        bundleAssign.putString("shop_Image", bundleShopImage);
-
+    private void setReceivedBundleDataToSendBundle(Bundle sendBundle) {
+        sendBundle.putString("shop_Name", bundleShopName);
+        sendBundle.putString("shop_Status", bundleShopStatus);
+        sendBundle.putString("shop_Address", bundleShopAddress);
+        sendBundle.putString("shop_Image", bundleShopImage);
     }
 }

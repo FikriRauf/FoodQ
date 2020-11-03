@@ -3,7 +3,8 @@ package com.example.entreprenuershipproject;
 import androidx.lifecycle.ViewModel;
 
 public class classShop extends ViewModel {
-    public String shopName,
+    public String
+            shopName,
             shopStatus,
             shopImage,
             shopAddress;

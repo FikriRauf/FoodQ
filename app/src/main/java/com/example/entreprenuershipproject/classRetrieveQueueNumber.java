@@ -9,7 +9,8 @@ public class classRetrieveQueueNumber extends ViewModel {
             queueNumber,
             queueStatus,
             queuedShopName,
-            queueState;
+            queueState,
+            queueShopImage;
 
     public classRetrieveQueueNumber() {
     }
@@ -19,6 +20,14 @@ public class classRetrieveQueueNumber extends ViewModel {
         this.queueStatus = queueStatus;
         this.queuedShopName = queuedShopName;
         this.queueState = queueState;
+    }
+
+    public String getQueueShopImage() {
+        return queueShopImage;
+    }
+
+    public void setQueueShopImage(String queueShopImage) {
+        this.queueShopImage = queueShopImage;
     }
 
     public String getQueueNumber() {

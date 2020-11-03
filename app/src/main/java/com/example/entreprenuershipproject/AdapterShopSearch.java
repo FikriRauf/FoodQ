@@ -1,8 +1,6 @@
 package com.example.entreprenuershipproject;
 
 import android.content.Context;
-import android.content.Intent;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,13 +10,9 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.cardview.widget.CardView;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.example.entreprenuershipproject.fragment.shopDetailsFragment;
 
 import java.util.ArrayList;
 
@@ -27,11 +21,6 @@ public class AdapterShopSearch extends RecyclerView.Adapter<AdapterShopSearch.Vi
     private static final  String TAG = "RecyclerView";
     private Context mContent;
     private ArrayList<searchShop> searchShopList;
-    private String
-            arrayListShopName,
-            arrayListShopStatus,
-            arrayListShopImage,
-            arrayListShopAddress;
 
     private OnItemClickListener mListener;
 
@@ -60,12 +49,12 @@ public class AdapterShopSearch extends RecyclerView.Adapter<AdapterShopSearch.Vi
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         searchShop getPosition = searchShopList.get(position);
-        Log.d(TAG, "onBindViewHolder: " + getPosition);
+//        Log.d(TAG, "onBindViewHolder: " + getPosition);
 
-        arrayListShopName = searchShopList.get(position).getShopName();
-        arrayListShopStatus = searchShopList.get(position).getShopStatus();
-        arrayListShopImage = searchShopList.get(position).getShopImage();
-        arrayListShopAddress = searchShopList.get(position).getShopAddress();
+        String arrayListShopName = getPosition.getShopName();
+        String arrayListShopStatus = getPosition.getShopStatus();
+        String arrayListShopImage = getPosition.getShopImage();
+        String arrayListShopAddress = getPosition.getShopAddress();
 
 //        Log.d(TAG, "onBindViewHolder: " + arrayListShopAddress);
 
