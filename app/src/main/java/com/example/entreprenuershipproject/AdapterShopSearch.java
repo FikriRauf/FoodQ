@@ -20,7 +20,7 @@ public class AdapterShopSearch extends RecyclerView.Adapter<AdapterShopSearch.Vi
     ArrayList<searchShop> searching;
     private static final  String TAG = "RecyclerView";
     private Context mContent;
-    private ArrayList<searchShop> searchShopList;
+    private ArrayList<classShop> searchShopList;
 
     private OnItemClickListener mListener;
 
@@ -32,7 +32,7 @@ public class AdapterShopSearch extends RecyclerView.Adapter<AdapterShopSearch.Vi
     }
 
 
-    public AdapterShopSearch(Context mContent, ArrayList<searchShop> searchShopList) {
+    public AdapterShopSearch(Context mContent, ArrayList<classShop> searchShopList) {
         this.mContent = mContent;
         this.searchShopList = searchShopList;
     }
@@ -48,7 +48,7 @@ public class AdapterShopSearch extends RecyclerView.Adapter<AdapterShopSearch.Vi
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        searchShop getPosition = searchShopList.get(position);
+        classShop getPosition = searchShopList.get(position);
 //        Log.d(TAG, "onBindViewHolder: " + getPosition);
 
         String arrayListShopName = getPosition.getShopName();

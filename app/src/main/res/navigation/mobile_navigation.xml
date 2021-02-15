@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/shopFragment"
-        android:name="com.example.entreprenuershipproject.fragment.ShopFragmentParent"
+        android:name="com.example.entreprenuershipproject.fragment.shopFragmentParent"
         android:label="fragment_shop"
         tools:layout="@layout/fragment_shop_parent"/>
     <fragment
@@ -20,16 +20,16 @@
         android:label="fragment_account"
         tools:layout="@layout/fragment_account"/>
 
-    <fragment
-        android:id="@+id/testerFragment"
-        android:name="com.example.entreprenuershipproject.fragment.tester.TesterFragmentParent"
-        android:label="fragment_tester"
-        tools:layout="@layout/fragment_tester_parent"/>
-    <fragment
-        android:id="@+id/orderListFragment"
-        android:name="com.example.entreprenuershipproject.fragment.tester.TesterFragmentParent2"
-        android:label="fragment_order_list"
-        tools:layout="@layout/fragment_tester_2"/>
+<!--    <fragment-->
+<!--        android:id="@+id/testerFragment"-->
+<!--        android:name="com.example.entreprenuershipproject.fragment.tester.TesterFragmentParent"-->
+<!--        android:label="fragment_tester"-->
+<!--        tools:layout="@layout/fragment_tester_parent"/>-->
+<!--    <fragment-->
+<!--        android:id="@+id/orderListFragment"-->
+<!--        android:name="com.example.entreprenuershipproject.fragment.tester.TesterFragmentParent2"-->
+<!--        android:label="fragment_order_list"-->
+<!--        tools:layout="@layout/fragment_tester_2"/>-->
 
 
 </navigation>

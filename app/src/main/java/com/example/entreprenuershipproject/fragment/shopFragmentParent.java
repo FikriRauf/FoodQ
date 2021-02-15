@@ -13,8 +13,8 @@ import android.view.ViewGroup;
 
 import com.example.entreprenuershipproject.R;
 
-public class ShopFragmentParent extends Fragment {
-    public ShopFragmentParent() {}
+public class shopFragmentParent extends Fragment {
+    public shopFragmentParent() {}
 
     @Nullable
     @Override
@@ -22,7 +22,7 @@ public class ShopFragmentParent extends Fragment {
         View root = inflater.inflate(R.layout.fragment_shop_parent, container, false);
 
         FragmentTransaction fragmentTransaction = getChildFragmentManager().beginTransaction();
-        fragmentTransaction.replace(R.id.shopFragmentChanger, new ShopFragmentChild());
+        fragmentTransaction.replace(R.id.shopFragmentChanger, new shopFragmentChild());
         fragmentTransaction.commit();
 
         return root;

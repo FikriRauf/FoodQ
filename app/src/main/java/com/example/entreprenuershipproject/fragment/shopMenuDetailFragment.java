@@ -1,11 +1,13 @@
-package com.example.entreprenuershipproject.fragment.tester;
+package com.example.entreprenuershipproject.fragment;
 
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -19,13 +21,18 @@ import com.bumptech.glide.Glide;
 import com.example.entreprenuershipproject.FragmentChangeListener;
 import com.example.entreprenuershipproject.R;
 import com.example.entreprenuershipproject.classCart;
+import com.example.entreprenuershipproject.fragment.tester.TesterShopMenu;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
-public class TesterShopMenuDetails extends Fragment {
+import java.util.ArrayList;
 
-    private static final String TAG = "TesterShopMenuDetail";
+public class shopMenuDetailFragment extends Fragment {
+    private static final String TAG = "shopMenuDetailFragment";
     Button
             minusBtn,
             plusBtn,
@@ -48,15 +55,26 @@ public class TesterShopMenuDetails extends Fragment {
             bundleFoodDescription,
             bundleFoodImage,
             bundleAssignedQueueNumber,
+            bundleShopName,
             foodInstructionInput,
             foodQuantityInput,
-            minusQuantityString;
+            minusQuantityString = "1";
+
+    CheckBox
+            filterOption1,
+            filterOption2,
+            filterOption3,
+            filterOption4;
 
     DatabaseReference
             baseDatabaseReference,
-            addToCartDatabaseReference;
+            addToCartDatabaseReference,
+            filterOptionDatabaseReference;
 
     classCart cartValues;
+    ArrayList<String> filterOptionList;
+    int counter;
+
 
 
     @Nullable
@@ -64,7 +82,8 @@ public class TesterShopMenuDetails extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_shop_menu_detail, container, false);
         cartValues = new classCart();
-
+        filterOptionList = new ArrayList<>();
+        counter = 1;
 
         setDatabaseReference();
         getBundleData();
@@ -73,13 +92,60 @@ public class TesterShopMenuDetails extends Fragment {
         setBundleDataToViews();
         addAndMinusButtonAction();
         sendFoodValueToDatabaseCart();
+        getFilterOptions();
 
         return root;
+    }
+
+    private void getFilterOptions() {
+        filterOptionDatabaseReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                    String databaseFilterShopName = dataSnapshot.getKey();
+                    int numberOfFiltersInShop = (int) dataSnapshot.getChildrenCount();
+//                    Log.d(TAG, "1st loop: " + databaseFilterShopName);
+//                    Log.d(TAG, "child size " + numberOfFiltersInShop);
+
+                    if (databaseFilterShopName != null) {
+                        if (databaseFilterShopName.equals(bundleShopName)) {
+                            for (int i = 1; i <= numberOfFiltersInShop; i++) {
+                                String filterOptionTag = "filterOption" + i;
+                                String filterOptionValue = (String) dataSnapshot.child(filterOptionTag).getValue();
+                                filterOptionList.add(filterOptionValue);
+                                Log.d(TAG, "filter List: " + filterOptionList);
+                            }
+                        }
+                    }
+                }
+                setDatabaseFilterDataToCheckbox();
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+
+    private void setDatabaseFilterDataToCheckbox() {
+        Log.d(TAG, "filter List: " + filterOptionList);
+
+        CheckBox[] checkBoxes = {filterOption1, filterOption2, filterOption3, filterOption4};
+
+        int i = 0;
+        for (CheckBox checkBox : checkBoxes) {
+            checkBox.setText(filterOptionList.get(i));
+            i++;
+            Log.d(TAG, "setDatabaseFilterDataToCheckbox: " + checkBox.getText());
+        }
     }
 
     private void setDatabaseReference() {
         baseDatabaseReference = FirebaseDatabase.getInstance().getReference();
         addToCartDatabaseReference = baseDatabaseReference.child("cart");
+        filterOptionDatabaseReference = baseDatabaseReference.child("filter");
     }
 
     private void getBundleData() {
@@ -90,6 +156,7 @@ public class TesterShopMenuDetails extends Fragment {
             bundleFoodDescription = bundle.getString("food_Description");
             bundleFoodImage = bundle.getString("food_Image");
             bundleAssignedQueueNumber = bundle.getString("queue_Number");
+            bundleShopName = bundle.getString("shop_Name");
         } else {
             Log.d(TAG, "getBundleData error: ");
         }
@@ -109,6 +176,11 @@ public class TesterShopMenuDetails extends Fragment {
         plusBtn = root.findViewById(R.id.plusBtn);
         minusBtn = root.findViewById(R.id.minusBtn);
         backBtn = root.findViewById(R.id.backBtn);
+
+        filterOption1 = root.findViewById(R.id.checkBox1);
+        filterOption2 = root.findViewById(R.id.checkBox2);
+        filterOption3 = root.findViewById(R.id.checkBox3);
+        filterOption4 = root.findViewById(R.id.checkBox4);
     }
 
     private void goBack() {
@@ -116,15 +188,17 @@ public class TesterShopMenuDetails extends Fragment {
             @Override
             public void onClick(View v) {
                 try {
-                    Fragment testerShopMenu = new TesterShopMenu();
+                    Fragment shopMenuFragmentChild = new shopMenuFragmentChild();
+
+                    Bundle sendShopDetail = new Bundle();
+                    sendShopDetail.putString("shop_Name", bundleShopName);
+                    sendShopDetail.putString("queue_Number", bundleAssignedQueueNumber);
+
+                    shopMenuFragmentChild.setArguments(sendShopDetail);
                     FragmentChangeListener fc= (FragmentChangeListener) getContext();
                     if (fc != null) {
-                        fc.replaceFragment(testerShopMenu);
+                        fc.replaceFragment(shopMenuFragmentChild);
                     }
-//                    Log.d(TAG, "onClick: can change or not");
-//                    FragmentTransaction fragmentTransaction = getParentFragmentManager().beginTransaction();
-//                    fragmentTransaction.replace(R.id.TesterFragmentChanger, );
-//                    fragmentTransaction.commit();
                 } catch (Exception e) {
                     Log.d(TAG, "onClick: heelllloo ");
                 }
@@ -134,7 +208,8 @@ public class TesterShopMenuDetails extends Fragment {
 
     private void setBundleDataToViews() {
         foodDetailName.setText(bundleFoodName);
-        foodDetailPrice.setText(bundleFoodPrice);
+        String PriceFormat = "RM " + bundleFoodPrice;
+        foodDetailPrice.setText(PriceFormat);
         foodDetailDescription.setText(bundleFoodDescription);
         Glide.with(this).load(bundleFoodImage).into(foodDetailImage);
     }
@@ -143,7 +218,6 @@ public class TesterShopMenuDetails extends Fragment {
         plusBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int addQuantityInteger = 0;
                 if (minusQuantityString != null) {
                     int addQuantityInteger2 = Integer.parseInt(minusQuantityString);
                     addQuantityInteger2++;
@@ -151,10 +225,11 @@ public class TesterShopMenuDetails extends Fragment {
                     minusQuantityString = addQuantityString2;
                     foodDetailQuantityInput.setText(addQuantityString2);
                 } else {
+                    int addQuantityInteger = 0;
                     addQuantityInteger++;
                     String addQuantityString = Integer.toString(addQuantityInteger);
-                    foodDetailQuantityInput.setText(addQuantityString);
                     minusQuantityString = addQuantityString;
+                    foodDetailQuantityInput.setText(addQuantityString);
                 }
             }
         });

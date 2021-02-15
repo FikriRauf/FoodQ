@@ -13,6 +13,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.example.entreprenuershipproject.R;
+import com.example.entreprenuershipproject.classFilter;
 import com.example.entreprenuershipproject.classFood;
 import com.example.entreprenuershipproject.classGenerateQueueNumber;
 import com.example.entreprenuershipproject.classShop;
@@ -30,23 +31,31 @@ public class TesterSetValueToDatabase extends Fragment {
             shopDetailDbReference,
             queueNumberDbReference,
             MenuDbReference,
-            shopMenuDbReference;
+            shopMenuDbReference,
+            shopFilterDbReference;
 
     classShop shopValue;
     classGenerateQueueNumber queueValue;
     classFood foodValue;
+    classFilter filterValue;
 
     String
             shop_Name,
             shop_Status,
             shop_Image,
             shop_Address,
+            shop_Phone_Number,
+            shop_Operate_Hour,
             queue_Status,
             queue_Number,
             Menu_Food_Name,
             Menu_Food_Price,
             Menu_Food_Image,
-            Menu_Food_Description;
+            Menu_Food_Description,
+            filterOption1,
+            filterOption2,
+            filterOption3,
+            filterOption4;
 
     Button
             submitShopDetailBtn,
@@ -74,6 +83,7 @@ public class TesterSetValueToDatabase extends Fragment {
         shopValue = new classShop();
         queueValue = new classGenerateQueueNumber();
         foodValue = new classFood();
+        filterValue = new classFilter();
         diningInDialog = new Dialog(requireContext());
 
         setLayoutViewsToLocalVariables(root);
@@ -101,7 +111,8 @@ public class TesterSetValueToDatabase extends Fragment {
         submitShopMenuBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                sendShopMenuDetailToDatabase();
+//                sendShopMenuDetailToDatabase();
+                sendShopFilterDetailToDatabase();
             }
         });
 
@@ -121,7 +132,8 @@ public class TesterSetValueToDatabase extends Fragment {
         shopDetailDbReference = baseDatabaseReference.child("shop");
         queueNumberDbReference = baseDatabaseReference.child("queue");
         MenuDbReference = baseDatabaseReference.child("menu");
-        shopMenuDbReference = MenuDbReference.child("Gong Cha");
+        shopMenuDbReference = MenuDbReference.child("The Social");
+        shopFilterDbReference = baseDatabaseReference.child("filter");
     }
 
     private void sendShopMenuDetailToDatabase() {
@@ -140,6 +152,26 @@ public class TesterSetValueToDatabase extends Fragment {
                     @Override
                     public void onSuccess(Void aVoid) {
                         Toast.makeText(getActivity(), "queue success", Toast.LENGTH_SHORT).show();
+                    }
+                });
+    }
+
+    private void sendShopFilterDetailToDatabase() {
+        filterOption1 = "No Cheese";
+        filterOption2 = "No Lettuce";
+        filterOption3 = "No Onion";
+        filterOption4 = "No Tomatoe";
+
+        filterValue.setFilterOption1(filterOption1);
+        filterValue.setFilterOption2(filterOption2);
+        filterValue.setFilterOption3(filterOption3);
+        filterValue.setFilterOption4(filterOption4);
+
+        shopFilterDbReference.child("Cool Blog").setValue(filterValue)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Toast.makeText(getActivity(), "filter success", Toast.LENGTH_SHORT).show();
                     }
                 });
     }
@@ -166,11 +198,15 @@ public class TesterSetValueToDatabase extends Fragment {
         shop_Status = "open";
         shop_Image = "null";
         shop_Address = "road is something";
+        shop_Phone_Number = "013-123-4356";
+        shop_Operate_Hour = "10AM - 5PM";
 
         shopValue.setShopName(shop_Name);
         shopValue.setShopStatus(shop_Status);
         shopValue.setShopImage(shop_Image);
         shopValue.setShopAddress(shop_Address);
+        shopValue.setShopOperateHour(shop_Operate_Hour);
+        shopValue.setShopPhoneNumber(shop_Phone_Number);
 
         shopDetailDbReference.push().setValue(shopValue)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {

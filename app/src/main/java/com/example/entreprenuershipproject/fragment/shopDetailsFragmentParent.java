@@ -14,11 +14,12 @@ import com.example.entreprenuershipproject.R;
 
 public class shopDetailsFragmentParent extends Fragment {
     String
-            bundleShopName,
-            bundleShopStatus,
             bundleShopAddress,
-            bundleShopImage;
-//    Bundle sendBundle;
+            bundleShopImage,
+            bundleShopName,
+            bundleShopOperatingHour,
+            bundleShopPhoneNumber,
+            bundleShopStatus;
 
 
     public shopDetailsFragmentParent() {
@@ -32,7 +33,7 @@ public class shopDetailsFragmentParent extends Fragment {
 
         Bundle sendBundle = new Bundle();
 
-        getReceivedBundleData();
+        getReceivedBundle();
         setReceivedBundleDataToSendBundle(sendBundle);
 
         Fragment shopDetailsFragmentChild = new shopDetailsFragmentChild();
@@ -45,13 +46,15 @@ public class shopDetailsFragmentParent extends Fragment {
         return root;
     }
 
-    private void getReceivedBundleData() {
+    private void getReceivedBundle() {
         Bundle bundleReceived = getArguments();
         if (bundleReceived != null) {
             bundleShopName = bundleReceived.getString("shop_Name");
             bundleShopStatus = bundleReceived.getString("shop_Status");
             bundleShopAddress = bundleReceived.getString("shop_Address");
             bundleShopImage = bundleReceived.getString("shop_Image");
+            bundleShopOperatingHour = bundleReceived.getString("shop_Operating_Hours");
+            bundleShopPhoneNumber = bundleReceived.getString("shop_Phone_Number");
         }
     }
 
@@ -60,5 +63,7 @@ public class shopDetailsFragmentParent extends Fragment {
         sendBundle.putString("shop_Status", bundleShopStatus);
         sendBundle.putString("shop_Address", bundleShopAddress);
         sendBundle.putString("shop_Image", bundleShopImage);
+        sendBundle.putString("shop_Operating_Hours", bundleShopOperatingHour);
+        sendBundle.putString("shop_Phone_Number", bundleShopPhoneNumber);
     }
 }

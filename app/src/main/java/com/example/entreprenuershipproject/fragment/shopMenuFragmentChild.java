@@ -9,7 +9,6 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -26,7 +25,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
-public class shopMenuFragment extends Fragment implements AdapterMenuFood.OnItemClickListener {
+public class shopMenuFragmentChild extends Fragment implements AdapterMenuFood.OnItemClickListener{
     String
             bundleShopName,
             bundleAssignedQueueNumber;
@@ -40,7 +39,7 @@ public class shopMenuFragment extends Fragment implements AdapterMenuFood.OnItem
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View root = inflater.inflate(R.layout.fragment_menu, container, false);
+        View root = inflater.inflate(R.layout.fragment_shop_menu_child, container, false);
         menuRecycleView = root.findViewById(R.id.menuRecycleView);
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
@@ -130,11 +129,12 @@ public class shopMenuFragment extends Fragment implements AdapterMenuFood.OnItem
 
         Bundle sendBundle = getClickItemData(clickItem);
 
-        Fragment testerShopMenuDetails = new TesterShopMenuDetails();
-        testerShopMenuDetails.setArguments(sendBundle);
+        Fragment shopMenuDetailFragment = new shopMenuDetailFragment();
+        shopMenuDetailFragment.setArguments(sendBundle);
+
         FragmentChangeListener fc= (FragmentChangeListener) getContext();
         if (fc != null) {
-            fc.replaceFragment(testerShopMenuDetails);
+            fc.replaceFragment(shopMenuDetailFragment);
         }
     }
 
@@ -145,6 +145,7 @@ public class shopMenuFragment extends Fragment implements AdapterMenuFood.OnItem
         bundle.putString("food_Image", foodValue.getFoodImage());
         bundle.putString("food_Description", foodValue.getFoodDescription());
         bundle.putString("queue_Number", bundleAssignedQueueNumber);
+        bundle.putString("shop_Name", bundleShopName);
 
         return bundle;
     }

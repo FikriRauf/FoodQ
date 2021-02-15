@@ -13,7 +13,6 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
-import com.example.entreprenuershipproject.FragmentChangeListener;
 import com.example.entreprenuershipproject.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -26,7 +25,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 
 public class retrieveQueueNumberDatabase extends Fragment {
-
+    private static final String TAG = "retrieveQueueNumberData";
     TextView queueNumberDisplay;
     DatabaseReference
             baseDatabaseReference,
@@ -47,6 +46,7 @@ public class retrieveQueueNumberDatabase extends Fragment {
             firstArrayElement,
             assignedQueueNumberId,
             bundleShopName,
+            bundleBooked,
             assignedQueueNumber;
 
     Button proceedBtn;
@@ -77,6 +77,7 @@ public class retrieveQueueNumberDatabase extends Fragment {
         Bundle bundle = getArguments();
         if (bundle != null) {
             bundleShopName = bundle.getString("shop_Name");
+            bundleBooked = bundle.getString("booked");
         }
     }
 
@@ -94,12 +95,12 @@ public class retrieveQueueNumberDatabase extends Fragment {
         FirebaseUser currentFirebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         if (currentFirebaseUser != null) {
             currentUserIdDetail = currentFirebaseUser.getUid();
-//            Log.d("user Detail", "current logged user id:  " + currentUserIdDetail);
+//            Log.d(TAG, "current logged user id:  " + currentUserIdDetail);
         }
     }
 
     private void getQueueNumberFromDatabase() {
-        queueNumberDatabaseReference.addValueEventListener(new ValueEventListener() {
+        queueNumberDatabaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
@@ -121,11 +122,11 @@ public class retrieveQueueNumberDatabase extends Fragment {
         queueNumber = (String) dataSnapshot.child("queueNumber").getValue();
         queueStatus = (String) dataSnapshot.child("queueStatus").getValue();
 
-        Log.d("Q Detail: ", " "
-                + "\nqueueId: " + queueId
-                + "\nqueueNumber: " + queueNumber
-                + "\nqueueStatus: " + queueStatus
-                + "\n ");
+//        Log.d(TAG, "getAllQueueNumbers: Q Detail: "
+//                + "\nqueueId: " + queueId
+//                + "\nqueueNumber: " + queueNumber
+//                + "\nqueueStatus: " + queueStatus
+//                + "\n ");
     }
 
     private void setAvailableQueueNumbersToArray() {
@@ -133,9 +134,9 @@ public class retrieveQueueNumberDatabase extends Fragment {
             availableQueueNumbers.add(counter, queueNumber);
             counter++;
         }
-        Log.d("Queue Array", " "
-                + "\nqArray: " + availableQueueNumbers
-                + "\nCounter: " + counter);
+//        Log.d(TAG, "setAvailableQueueNumbersToArray: Queue Array"
+//                + "\nqArray: " + availableQueueNumbers
+//                + "\nCounter: " + counter);
     }
 
     private void queueNumberAssignment(DataSnapshot snapshot) {
@@ -161,7 +162,7 @@ public class retrieveQueueNumberDatabase extends Fragment {
         if (queueNumberFromDatabase != null) {
             if (queueNumberFromDatabase.equals(firstArrayElement)) {
                 assignedQueueNumber = queueNumberFromDatabase;
-                Log.d("QNumber holder", "assignedQueueNumber: " + assignedQueueNumber);
+//                Log.d(TAG, "searchAssignedQueueNumberInDatabase: " + assignedQueueNumber);
                 getAssignedQueueNumberId(dataSnapshot);
                 setUserAndShopDetailsToAssignedQueuNumber();
             }
@@ -170,21 +171,24 @@ public class retrieveQueueNumberDatabase extends Fragment {
 
     private void getAssignedQueueNumberId(DataSnapshot dataSnapshot) {
         assignedQueueNumberId = dataSnapshot.getKey();
-        Log.d("assigned qNumber", " "
-                + "\nID of queue number from  first array element " + assignedQueueNumberId);
+//        Log.d(TAG, "assigned qNumber"
+//                + "\nID of queue number from  first array element " + assignedQueueNumberId);
     }
 
     private void setUserAndShopDetailsToAssignedQueuNumber() {
         if (assignedQueueNumberId != null) {
             queueNumberChildDatabaseReference = queueNumberDatabaseReference.child(assignedQueueNumberId);
         } else {
-            Log.d("HELLLLOOO", "U FCK UP");
+            Log.d(TAG,"setUserAndShopDetailsToAssignedQueuNumber: HELLLLOOO");
         }
 
         queueNumberChildDatabaseReference.child("queueStatus").setValue("unavailable");
         queueNumberChildDatabaseReference.child("queueState").setValue("Waiting");
         queueNumberChildDatabaseReference.child("userId").setValue(currentUserIdDetail);
         queueNumberChildDatabaseReference.child("shopName").setValue(bundleShopName);
+        if (bundleBooked != null) {
+            queueNumberChildDatabaseReference.child("reservation").setValue(bundleBooked);
+        }
     }
 
     private void proceedToShopMenu() {
@@ -194,11 +198,11 @@ public class retrieveQueueNumberDatabase extends Fragment {
                 Bundle sendBundle = new Bundle();
                 setBundleDataToFragment(sendBundle);
 
-                Fragment shopMenuFragment = new shopMenuFragment();
-                shopMenuFragment.setArguments(sendBundle);
+                Fragment shopMenuFragmentParent = new shopMenuFragmentParent();
+                shopMenuFragmentParent.setArguments(sendBundle);
 
                 FragmentTransaction fragmentTransaction = getParentFragmentManager().beginTransaction();
-                fragmentTransaction.replace(R.id.shopDetailFragmentChanger, shopMenuFragment);
+                fragmentTransaction.replace(R.id.shopDetailFragmentChanger, shopMenuFragmentParent);
                 fragmentTransaction.commit();
 
             }

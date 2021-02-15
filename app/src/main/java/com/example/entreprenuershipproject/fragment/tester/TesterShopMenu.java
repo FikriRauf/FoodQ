@@ -39,7 +39,7 @@ public class TesterShopMenu extends Fragment implements AdapterMenuFood.OnItemCl
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        View root = inflater.inflate(R.layout.fragment_menu, container, false);
+        View root = inflater.inflate(R.layout.fragment_shop_menu_child, container, false);
         menuRecycleView = root.findViewById(R.id.menuRecycleView);
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
@@ -54,18 +54,6 @@ public class TesterShopMenu extends Fragment implements AdapterMenuFood.OnItemCl
         foodClass = new classFood();
 
         return root;
-    }
-
-    private void clearAll() {
-        if (menuList != null) {
-            menuList.clear();
-
-            if (adapterMenuFood != null) {
-                adapterMenuFood.notifyDataSetChanged();
-            }
-        }
-
-        menuList = new ArrayList<>();
     }
 
     private void getMenuDataFromDatabase() {
@@ -85,17 +73,16 @@ public class TesterShopMenu extends Fragment implements AdapterMenuFood.OnItemCl
 
     }
 
-    private void bindArrayListToAdapter() {
-        adapterMenuFood = new AdapterMenuFood(getContext(), menuList);
-        menuRecycleView.setAdapter(adapterMenuFood);
-        adapterMenuFood.notifyDataSetChanged();
-        adapterMenuFood.setOnItemClickListener(this);
+    private void clearAll() {
+        if (menuList != null) {
+            menuList.clear();
 
-    }
+            if (adapterMenuFood != null) {
+                adapterMenuFood.notifyDataSetChanged();
+            }
+        }
 
-    private void bindObjectToArrayList(classFood foodClass) {
-        menuList.add(foodClass);
-
+        menuList = new ArrayList<>();
     }
 
     private void bindDatabaseDataToObject(DataSnapshot snapshot) {
@@ -110,6 +97,19 @@ public class TesterShopMenu extends Fragment implements AdapterMenuFood.OnItemCl
 
             bindObjectToArrayList(food);
         }
+    }
+
+    private void bindObjectToArrayList(classFood foodClass) {
+        menuList.add(foodClass);
+
+    }
+
+    private void bindArrayListToAdapter() {
+        adapterMenuFood = new AdapterMenuFood(getContext(), menuList);
+        menuRecycleView.setAdapter(adapterMenuFood);
+        adapterMenuFood.notifyDataSetChanged();
+        adapterMenuFood.setOnItemClickListener(this);
+
     }
 
     @Override

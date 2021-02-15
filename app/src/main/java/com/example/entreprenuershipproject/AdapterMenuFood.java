@@ -48,8 +48,9 @@ public class AdapterMenuFood extends RecyclerView.Adapter<AdapterMenuFood.ViewHo
         String retrieveFoodPrice = getFoodPosition.getFoodPrice();
         String retrieveFoodImage = getFoodPosition.getFoodImage();
 
+        String foodPriceFormat = "RM" + retrieveFoodPrice;
         holder.displayFoodName.setText(retrieveFoodName);
-        holder.displayFoodPrice.setText(retrieveFoodPrice);
+        holder.displayFoodPrice.setText(foodPriceFormat);
         Glide.with(mContent).load(retrieveFoodImage).into(holder.displayFoodImage);
 
     }

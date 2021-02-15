@@ -40,6 +40,7 @@ public class waitingQueueFragmentChild extends Fragment implements AdapterRetrie
             assignedQueueNumberFromDatabase,
             queueNumberShopName,
             queueNumberState,
+            queueReservation,
             databaseShopImage,
             databaseUserId,
             databaseShopName;
@@ -68,7 +69,6 @@ public class waitingQueueFragmentChild extends Fragment implements AdapterRetrie
         getCurrentlyLoggedUserId();
         getShopImage();
         getQueueDataFromDatabase();
-
 
         return root;
     }
@@ -117,11 +117,8 @@ public class waitingQueueFragmentChild extends Fragment implements AdapterRetrie
         queueDatabaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
-                    classRetrieveQueueNumber retrieveQueue = new classRetrieveQueueNumber();
-                    getUserIdAssignedToQueueNumber(dataSnapshot);
-                    getQueueNumberAssignedToCurrentUser(dataSnapshot, retrieveQueue);
-                }
+                clearAll();
+                bindDatabaseDataToObject(snapshot);
                 bindArrayListToAdapter();
             }
 
@@ -132,24 +129,50 @@ public class waitingQueueFragmentChild extends Fragment implements AdapterRetrie
         });
     }
 
+    private void clearAll() {
+        if (queueWaitingList != null) {
+            queueWaitingList.clear();
+            if (adapterRetrieveCustomerQueueNumber != null) {
+                adapterRetrieveCustomerQueueNumber.notifyDataSetChanged();
+            }
+        }
+        queueWaitingList = new ArrayList<>();
+    }
+
+    private void bindDatabaseDataToObject(DataSnapshot snapshot) {
+        for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+            classRetrieveQueueNumber retrieveQueue = new classRetrieveQueueNumber();
+            getUserIdAssignedToQueueNumber(dataSnapshot);
+            getQueueNumberWithCurrentUser(dataSnapshot, retrieveQueue);
+        }
+    }
+
     private void getUserIdAssignedToQueueNumber(DataSnapshot dataSnapshot) {
         databaseUserId = dataSnapshot.child("userId").getValue(String.class);
     }
 
-    private void getQueueNumberAssignedToCurrentUser(DataSnapshot dataSnapshot, classRetrieveQueueNumber retrieveQueue) {
+    private void getQueueNumberWithCurrentUser(DataSnapshot dataSnapshot, classRetrieveQueueNumber retrieveQueue) {
         if (databaseUserId != null) {
             if (databaseUserId.equals(currentUserId)) {
                 setDatabaseDataToLocalVariables(dataSnapshot);
-                bindDatabaseDataToObject(retrieveQueue);
+                bindDatabaseVariableToObject(retrieveQueue);
                 bindObjectToArrayList(retrieveQueue);
             }
         }
     }
 
-    private void bindDatabaseDataToObject(classRetrieveQueueNumber retrieveQueue) {
+    private void setDatabaseDataToLocalVariables(DataSnapshot dataSnapshot) {
+        assignedQueueNumberFromDatabase = dataSnapshot.child("queueNumber").getValue(String.class);
+        queueNumberState = dataSnapshot.child("queueState").getValue(String.class);
+        queueNumberShopName = dataSnapshot.child("shopName").getValue(String.class);
+        queueReservation = dataSnapshot.child("reservation").getValue(String.class);
+    }
+
+    private void bindDatabaseVariableToObject(classRetrieveQueueNumber retrieveQueue) {
         retrieveQueue.setQueuedShopName(queueNumberShopName);
         retrieveQueue.setQueueNumber(assignedQueueNumberFromDatabase);
         retrieveQueue.setQueueState(queueNumberState);
+        retrieveQueue.setReservation(queueReservation);
 
         for(Map<String, String> map : list){
             for(String key : map.keySet()){
@@ -161,12 +184,6 @@ public class waitingQueueFragmentChild extends Fragment implements AdapterRetrie
 
             }
         }
-    }
-
-    private void setDatabaseDataToLocalVariables(DataSnapshot dataSnapshot) {
-        assignedQueueNumberFromDatabase = dataSnapshot.child("queueNumber").getValue(String.class);
-        queueNumberState = dataSnapshot.child("queueState").getValue(String.class);
-        queueNumberShopName = dataSnapshot.child("shopName").getValue(String.class);
     }
 
     private void bindObjectToArrayList(classRetrieveQueueNumber retrieveQueue) {
@@ -182,8 +199,8 @@ public class waitingQueueFragmentChild extends Fragment implements AdapterRetrie
     @Override
     public void onItemClick(int position) {
         classRetrieveQueueNumber clickItem = queueWaitingList.get(position);
-        Bundle sentBundle = new Bundle();
-        sentBundle.putString("queue_Number", clickItem.getQueueNumber());
+
+        Bundle sentBundle = getClickItemData(clickItem);
 
         Fragment foodCartFragment = new foodCartFragment();
         foodCartFragment.setArguments(sentBundle);
@@ -192,5 +209,12 @@ public class waitingQueueFragmentChild extends Fragment implements AdapterRetrie
         if (fc != null) {
             fc.replaceFragment(foodCartFragment);
         }
+    }
+
+    private Bundle getClickItemData(classRetrieveQueueNumber clickItem) {
+        Bundle bundle1 = new Bundle();
+        bundle1.putString("queue_Number", clickItem.getQueueNumber());
+
+        return bundle1;
     }
 }

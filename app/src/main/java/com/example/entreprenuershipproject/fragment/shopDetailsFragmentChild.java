@@ -2,6 +2,7 @@ package com.example.entreprenuershipproject.fragment;
 
 import android.app.Dialog;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,20 +16,26 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.bumptech.glide.Glide;
+import com.example.entreprenuershipproject.FragmentChangeListener;
 import com.example.entreprenuershipproject.R;
 
 public class shopDetailsFragmentChild extends Fragment {
-
+    private static final String TAG = "shopDetailsFragmentChil";
     TextView
             shopDetailName,
             shopDetailStatus,
-            shopDetailAddress;
+            shopDetailAddress,
+            shopDetailOperatingHours,
+            shopDetailPhoneNumber,
+            backBtn;
 
     String
             bundleShopName,
             bundleShopStatus,
             bundleShopAddress,
-            bundleShopImage;
+            bundleShopImage,
+            bundleShopOperatingHour,
+            bundleShopPhoneNumber;
 
     ImageView
             shopDetailImage,
@@ -44,7 +51,7 @@ public class shopDetailsFragmentChild extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        View root = inflater.inflate(R.layout.fragment_shop_details_2, container, false);
+        View root = inflater.inflate(R.layout.fragment_shop_details_child, container, false);
 
 
         diningInDialog = new Dialog(requireContext());
@@ -52,6 +59,7 @@ public class shopDetailsFragmentChild extends Fragment {
         setLayoutViewsToLocalVariables(root);
         getBundleData();
         setBundleDataToLayoutViews();
+        goBack();
         diningBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -62,12 +70,33 @@ public class shopDetailsFragmentChild extends Fragment {
 
         return root;
     }
+    private void goBack() {
+        backBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                try {
+                    Fragment shopMenuFragmentParent = new shopFragmentParent();
+
+                    FragmentChangeListener fc= (FragmentChangeListener) getContext();
+                    if (fc != null) {
+                        fc.replaceFragment(shopMenuFragmentParent);
+                    }
+                } catch (Exception e) {
+                    Log.d(TAG, "onClick: heelllloo ");
+                }
+            }
+        });
+    }
 
     private void setLayoutViewsToLocalVariables(View root) {
         shopDetailName = root.findViewById(R.id.databaseShopName);
         shopDetailStatus = root.findViewById(R.id.databaseShopStatus);
         shopDetailAddress = root.findViewById(R.id.databaseShopAddress);
         shopDetailImage = root.findViewById(R.id.databaseShopImage);
+        shopDetailOperatingHours = root.findViewById(R.id.databaseShopOperatingHours);
+        shopDetailPhoneNumber = root.findViewById(R.id.databaseShopPhoneNumber);
+
+        backBtn = root.findViewById(R.id.backBtn);
         diningBtn = root.findViewById(R.id.diningInBtn);
     }
 
@@ -78,6 +107,8 @@ public class shopDetailsFragmentChild extends Fragment {
             bundleShopStatus = bundle.getString("shop_Status");
             bundleShopAddress = bundle.getString("shop_Address");
             bundleShopImage = bundle.getString("shop_Image");
+            bundleShopOperatingHour = bundle.getString("shop_Operating_Hours");
+            bundleShopPhoneNumber = bundle.getString("shop_Phone_Number");
         }
     }
 
@@ -85,6 +116,8 @@ public class shopDetailsFragmentChild extends Fragment {
         shopDetailName.setText(bundleShopName);
         shopDetailStatus.setText(bundleShopStatus);
         shopDetailAddress.setText(bundleShopAddress);
+        shopDetailOperatingHours.setText(bundleShopOperatingHour);
+        shopDetailPhoneNumber.setText(bundleShopPhoneNumber);
         Glide.with(this).load(bundleShopImage).into(shopDetailImage);
     }
 
@@ -105,7 +138,16 @@ public class shopDetailsFragmentChild extends Fragment {
         notDiningInTodayBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Bundle sendBundle = new Bundle();
+                sendBundle.putString("shop_Name", bundleShopName);
 
+                Fragment calendarFragment = new calendarFragment();
+                calendarFragment.setArguments(sendBundle);
+
+                FragmentTransaction fragmentTransaction = getParentFragmentManager().beginTransaction();
+                fragmentTransaction.replace(R.id.shopDetailFragmentChanger, calendarFragment);
+                fragmentTransaction.commit();
+                diningInDialog.dismiss();
             }
         });
 

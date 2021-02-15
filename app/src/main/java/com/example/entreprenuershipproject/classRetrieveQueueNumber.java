@@ -10,16 +10,27 @@ public class classRetrieveQueueNumber extends ViewModel {
             queueStatus,
             queuedShopName,
             queueState,
-            queueShopImage;
+            queueShopImage,
+            reservation;
 
     public classRetrieveQueueNumber() {
     }
 
-    public classRetrieveQueueNumber(String queueNumber, String queueStatus, String queuedShopName, String queueState) {
+    public classRetrieveQueueNumber(String queueNumber, String queueStatus, String queuedShopName, String queueState, String queueShopImage, String reservation) {
         this.queueNumber = queueNumber;
         this.queueStatus = queueStatus;
         this.queuedShopName = queuedShopName;
         this.queueState = queueState;
+        this.queueShopImage = queueShopImage;
+        this.reservation = reservation;
+    }
+
+    public String getReservation() {
+        return reservation;
+    }
+
+    public void setReservation(String reservation) {
+        this.reservation = reservation;
     }
 
     public String getQueueShopImage() {
